@@ -16,11 +16,12 @@ paginate = 10
   ShowToc = false
   ShowPageNums = true
   mainSections = ["blog"]
+  ShowAllPagesInArchive = true
 
   [params.profileMode]
     enabled = true
     title = "Jason Robert"
-    subtitle = "Principal Software Engineer at Microsoft · Azure Core Office of the CTO · AI Tooling · Distributed Systems"
+    subtitle = "Design. Build. Teach.\n\n---\n\nSoftware engineer writing about distributed systems, AI tooling, and the craft of building software."
 
     [[params.profileMode.buttons]]
       name = "Blog"
@@ -68,6 +69,12 @@ paginate = 10
     name = "About"
     url = "/about/"
     weight = 30
+
+  [[menu.main]]
+    identifier = "archive"
+    name = "Archive"
+    url = "/archive/"
+    weight = 35
 
   [[menu.main]]
     identifier = "search"

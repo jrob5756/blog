@@ -1,0 +1,84 @@
+baseURL = "https://jasonrobert.dev/"
+languageCode = "en-us"
+title = "Jason Robert"
+theme = "PaperMod"
+paginate = 10
+
+[params]
+  description = "Principal Software Engineer — AI Tooling, Distributed Systems, Cloud Architecture"
+  author = "Jason Robert"
+  defaultTheme = "auto"  # dark/light follows system preference
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+
+  [params.homeInfoParams]
+    Title = "Jason Robert"
+    Content = "Principal Software Engineer at Microsoft · Azure Core Office of the CTO · AI Tooling · Distributed Systems"
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/jrob5756"
+
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/jasonrobert/"
+
+  [[params.socialIcons]]
+    name = "twitter"
+    url = "https://x.com/jasontrobert"
+
+  [[params.socialIcons]]
+    name = "rss"
+    url = "/index.xml"
+
+[menu]
+  [[menu.main]]
+    identifier = "blog"
+    name = "Blog"
+    url = "/blog/"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "news"
+    name = "News"
+    url = "/news/"
+    weight = 20
+
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 30
+
+  [[menu.main]]
+    identifier = "search"
+    name = "Search"
+    url = "/search/"
+    weight = 40
+
+[markup]
+  [markup.highlight]
+    style = "dracula"
+    lineNos = false
+    codeFences = true
+    guessSyntax = true
+
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = false
+    [markup.goldmark.extensions]
+      footnote = true
+      strikethrough = true
+      table = true
+      taskList = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]  # JSON for search
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"

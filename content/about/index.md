@@ -23,3 +23,7 @@ On the leadership side, I'd rather build partnerships than mandate compliance. I
 - [GitHub](https://github.com/jrob5756)
 - [LinkedIn](https://www.linkedin.com/in/jasonrobert/)
 - [Twitter](https://x.com/jasontrobert)
+
+---
+
+*The views and opinions expressed on this site are my own and do not represent those of my employer.*

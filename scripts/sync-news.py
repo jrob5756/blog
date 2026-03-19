@@ -103,6 +103,12 @@ def process_report(report_path: Path, output_path: Path) -> bool:
     title = format_date_title(year, month, day)
     summary = extract_summary(content)
 
+    # Strip the leading H1 heading if it matches the title pattern
+    # (avoids duplication since Hugo renders the front matter title)
+    lines = content.split("\n")
+    if lines and re.match(r"^#\s+News Summary", lines[0]):
+        content = "\n".join(lines[1:]).lstrip("\n")
+
     # Build Hugo front matter
     front_matter = f"""---
 title: "{title}"
@@ -111,6 +117,7 @@ summary: "{summary.replace('"', '\\"')}"
 tags: ["news"]
 categories: ["news"]
 ShowReadingTime: true
+ShowToc: false
 ---
 
 """

@@ -13,11 +13,26 @@ paginate = 10
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
   ShowCodeCopyButtons = true
-  ShowToc = true
+  ShowToc = false
+  ShowPageNums = true
+  mainSections = ["blog"]
 
-  [params.homeInfoParams]
-    Title = "Jason Robert"
-    Content = "Principal Software Engineer at Microsoft · Azure Core Office of the CTO · AI Tooling · Distributed Systems"
+  [params.profileMode]
+    enabled = true
+    title = "Jason Robert"
+    subtitle = "Principal Software Engineer at Microsoft · Azure Core Office of the CTO · AI Tooling · Distributed Systems"
+
+    [[params.profileMode.buttons]]
+      name = "Blog"
+      url = "/blog/"
+
+    [[params.profileMode.buttons]]
+      name = "News"
+      url = "/news/"
+
+    [[params.profileMode.buttons]]
+      name = "About"
+      url = "/about/"
 
   [[params.socialIcons]]
     name = "github"

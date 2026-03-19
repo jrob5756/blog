@@ -1,0 +1,17 @@
+{{- define "main" }}
+
+{{/* Redirect /blog/ to the most recent blog post */}}
+{{- $pages := union .RegularPages .Sections }}
+{{- if gt (len $pages) 0 }}
+  {{- $latest := index $pages 0 }}
+  <meta http-equiv="refresh" content="0; url={{ $latest.Permalink }}">
+  <script>window.location.href = "{{ $latest.Permalink }}";</script>
+  <p>Redirecting to <a href="{{ $latest.Permalink }}">{{ $latest.Title }}</a>...</p>
+{{- else }}
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+</header>
+<p>No blog posts yet. Check back soon.</p>
+{{- end }}
+
+{{- end }}{{- /* end main */ -}}

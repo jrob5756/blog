@@ -1,2 +1,168 @@
 /* Custom CSS overrides for PaperMod theme */
-/* Add your customizations here */
+
+/* ============================================
+   Homepage — Business Card Style
+   ============================================ */
+
+.profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 200px);
+  padding: 40px 20px;
+}
+
+.profile .profile_inner {
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 48px 56px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle accent line along the top */
+.profile .profile_inner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+}
+
+.profile .profile_inner h1 {
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.profile .profile_inner > span {
+  font-size: 14px;
+  color: var(--secondary);
+  line-height: 1.6;
+  display: block;
+  margin-bottom: 24px;
+}
+
+/* Social icons row */
+.profile .profile_inner > div:has(.social-icons) {
+  margin-bottom: 24px;
+}
+
+/* Buttons as minimal pill links */
+.profile .buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.profile .button {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--primary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.profile .button:hover {
+  background: var(--primary);
+  color: var(--theme);
+  border-color: var(--primary);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .profile .profile_inner {
+    padding: 32px 28px;
+  }
+
+  .profile .profile_inner h1 {
+    font-size: 24px;
+  }
+}
+
+/* ============================================
+   News — AI Disclaimer
+   ============================================ */
+
+.ai-disclaimer {
+  font-size: 13px;
+  color: var(--secondary);
+  background: var(--code-bg);
+  border-left: 3px solid var(--secondary);
+  padding: 10px 14px;
+  margin: 16px 0 24px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  line-height: 1.5;
+}
+
+.ai-disclaimer a {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+.ai-disclaimer a:hover {
+  color: var(--primary);
+}
+
+/* ============================================
+   News — Prev/Next Day Navigation
+   ============================================ */
+
+.news-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.news-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: var(--entry);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+  min-width: 0;
+}
+
+.news-nav-link:hover {
+  transform: translateY(-2px);
+}
+
+.news-nav-prev {
+  align-items: flex-start;
+}
+
+.news-nav-next {
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+.news-nav-label {
+  font-size: 13px;
+  color: var(--secondary);
+}
+
+.news-nav-date {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--primary);
+}

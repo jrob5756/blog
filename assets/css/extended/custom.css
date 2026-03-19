@@ -101,6 +101,7 @@
   color: var(--primary);
   text-decoration: none;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .profile .button:hover {
@@ -117,6 +118,15 @@
 
   .profile .profile_inner h1 {
     font-size: 24px;
+  }
+
+  .profile .buttons {
+    gap: 8px;
+  }
+
+  .profile .button {
+    font-size: 12px;
+    padding: 6px 14px;
   }
 }
 

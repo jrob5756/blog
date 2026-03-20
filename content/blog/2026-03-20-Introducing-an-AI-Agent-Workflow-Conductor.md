@@ -4,7 +4,7 @@ date: 2026-03-20
 description: "An open-source CLI for orchestrating multi-agent AI workflows with YAML — where the orchestrator isn't an LLM."
 tags: ["blog", "ai", "tooling", "open-source"]
 categories: ["engineering"]
-draft: true
+draft: false
 ---
 
 [Conductor](https://github.com/microsoft/conductor) is a CLI my team built for orchestrating multi-agent AI workflows. We've been using it on a recent project and building it in the open from the start. I kept putting off this post because I wanted to get the framing right, but at this point I'd rather just get it out there and iterate.

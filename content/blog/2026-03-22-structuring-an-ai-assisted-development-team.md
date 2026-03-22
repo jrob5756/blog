@@ -7,15 +7,15 @@ categories: ["engineering"]
 draft: true
 ---
 
-Most of the conversation around AI-assisted development focuses on individual productivity. How can one engineer ship faster, write fewer bugs, automate more of the tedious stuff. That's real and it matters. But I've been spending more time lately thinking about the team-level question: when coding speed stops being the constraint, what do you actually change about how a project is structured?
+Most of the conversation around AI-assisted development focuses on individual productivity. How can one engineer ship faster, write fewer bugs, automate more of the tedious stuff. But I've been thinking more about the team-level question: when coding speed stops being the constraint, what do you actually change about how a project is structured?
 
-This isn't theoretical. My team has been running a project this way for the past few months, and we've learned some things. Not all of them obvious.
+My team has been running a project this way recently, and we've learned some things. Not all of them obvious.
 
 ## Coding speed changed the bottleneck
 
-Here's the thing that took a while to internalize: when AI makes implementation fast, the bottleneck shifts to specification and coordination. The actual writing of code is no longer the slow part. Figuring out what to build, making sure it's the right thing, and keeping multiple people from stepping on each other's work is where the time goes.
+Here's the thing that took a while to internalize: when AI makes implementation fast, the bottleneck shifts to coordination. The actual writing of code is no longer the slow part. Figuring out what to build, making sure it's the right thing, and keeping multiple people from stepping on each other's work is where the time goes.
 
-This sounds like it should be obvious. It wasn't, at least not operationally. We kept planning projects the same way we always had, with the same sprint structures and the same assumptions about how long implementation takes. The first few sprints felt chaotic. Engineers were finishing tasks faster than we could spec the next ones. The planning process became the bottleneck, not the coding.
+This sounds like it should be obvious. It wasn't, at least not operationally. We've been planning projects the same way we always had, with the same sprint structures. The first few sprints felt chaotic. Engineers were finishing tasks faster than we could plan the next ones. The planning and coordination process became the bottleneck, not the coding.
 
 Once we named that, we started restructuring around it.
 

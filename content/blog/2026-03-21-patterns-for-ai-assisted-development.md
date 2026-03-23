@@ -15,7 +15,7 @@ Over the past several months, I've been working with folks on my team to standar
 
 This post isn't about any specific tool. When I say "coding assistant," I mean the whole category: GitHub Copilot, Claude Code, Cursor, OpenCode, whatever you're using. The patterns apply regardless.
 
-## 1. One-Shot Editing
+## 1. One-Shot
 
 The simplest pattern. You know exactly what you want, you tell the assistant, it does it.
 

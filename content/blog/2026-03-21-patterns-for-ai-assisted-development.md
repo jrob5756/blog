@@ -4,7 +4,7 @@ date: 2026-03-21
 description: "A practical guide for matching the right level of AI assistance to the right task, from one-shot edits to multi-agent workflows."
 tags: ["blog", "ai", "tooling", "engineering"]
 categories: ["engineering"]
-draft: true
+draft: false
 ---
 
 The tooling for AI-assisted development is moving fast. Coding assistants ship new features every week, each with their own spin on agents, planning mode, and various levels of customization. It's a lot to keep up with, and most of the discourse focuses on the tools themselves.

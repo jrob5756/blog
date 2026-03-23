@@ -15,7 +15,7 @@ Over the past several months, I've been working with folks on my team to standar
 
 This post isn't about any specific tool. When I say "coding assistant," I mean the whole category: GitHub Copilot, Claude Code, Cursor, OpenCode, whatever you're using. The patterns apply regardless.
 
-## 1. One-Shot Editing (~1 minute)
+## 1. One-Shot Editing
 
 The simplest pattern. You know exactly what you want, you tell the assistant, it does it.
 
@@ -30,7 +30,7 @@ I use this constantly for things I know how to do but don't feel like typing out
 
 **When to move on:** If you catch yourself writing a multi-paragraph prompt to explain what you want, you've probably outgrown one-shot. Step up to plan mode.
 
-## 2. Plan Mode (~2–3 minutes)
+## 2. Plan Mode
 
 Most coding assistants now have some form of planning mode where they read files, explore the codebase, reason about the task, and propose a plan without making any changes. The mechanics differ, but the pattern is the same: the AI thinks before it acts.
 
@@ -47,7 +47,7 @@ A concrete example: building a new API endpoint. Instead of asking the assistant
 
 **When to move on:** If the task is large enough that you'd want a second opinion on the plan, or if you need the plan to persist as a document rather than disappearing in the chat log, step up to spec-driven development.
 
-## 3. Spec-Driven Development (~5–10 minutes)
+## 3. Spec-Driven Development
 
 This is where things get interesting. Coding assistants have made code generation fast and cheap. The bottleneck has shifted upstream. The quality of the output depends almost entirely on how well the task is specified. Spec-driven development makes the specification an explicit, tangible artifact.
 
@@ -64,7 +64,7 @@ The spec also acts as a checkpoint for the AI. When you hand a well-written spec
 
 **When to move on:** If the spec itself is complex enough to benefit from structured review (accuracy scoring, completeness checks, iterative refinement), it's time for a multi-agent workflow.
 
-## 4. Multi-Agent Workflows (~10–30+ minutes)
+## 4. Multi-Agent Workflows
 
 For larger features in complex codebases, a single agent session starts to hit its limits. Context windows fill up, earlier decisions fall out of context, and the quality of output degrades over long sessions. Multi-agent workflows address this by giving each agent a focused, scoped context rather than an ever-growing conversation history, with built-in review cycles.
 

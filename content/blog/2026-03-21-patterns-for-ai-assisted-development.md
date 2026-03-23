@@ -38,18 +38,20 @@ What makes this different from one-shot isn't just the time investment. It's the
 
 Plan mode has gotten meaningfully better in the last year. Assistants now routinely spin up sub-agents to explore different parts of a codebase in parallel, read test files to understand expected behavior, and check for existing patterns before generating new code. It's not just "read the file and write a diff" anymore.
 
+A concrete example: building a new API endpoint. Instead of asking the assistant to write the code, you ask it to survey the codebase and list out the steps it would take. It prints an ephemeral plan in the chat: update the schema, add a new route, create the controller, add tests. You read it, spot that it missed adding the authorization middleware, correct it in the chat, and *then* tell it to execute.
+
 **When to reach for it:**
 - The task touches multiple files or requires understanding existing patterns
 - You want to review the approach before implementation starts
 - The task is small to medium: a small feature or a bug that spans a few modules
 
-**When to move on:** If the task is large enough that you'd want a second opinion on the plan, or if you want the plan to be a reviewable artifact that the team can discuss, step up to spec-driven development.
+**When to move on:** If the task is large enough that you'd want a second opinion on the plan, or if you need the plan to persist as a document rather than disappearing in the chat log, step up to spec-driven development.
 
 ## 3. Spec-Driven Development (~5–10 minutes)
 
 This is where things get interesting. Coding assistants have made code generation fast and cheap. The bottleneck has shifted upstream. The quality of the output depends almost entirely on how well the task is specified. Spec-driven development makes the specification an explicit, tangible artifact.
 
-The idea is straightforward: before you generate any code, have the AI produce a markdown spec that describes what's being built, why, and how. Think of it as a lightweight design doc that drives implementation. Tools like [SpecKit](https://github.com/github/spec-kit) and [GSD](https://github.com/gsd-build/get-shit-done/) have built tooling around this pattern. We've been using our own internal tooling for SDD, but again, the important part is not the tool, it's the pattern.
+The idea is straightforward: before you generate any code, have the AI produce a markdown spec file that describes what's being built, why, and how. Think of it as a lightweight design doc that drives implementation. Tools like [SpecKit](https://github.com/github/spec-kit) and [GSD](https://github.com/gsd-build/get-shit-done/) have built tooling around this pattern. We've been using our own internal tooling for SDD, but again, the important part is not the tool, it's the pattern.
 
 Here's why this matters beyond the obvious "planning is good" truism: **the spec becomes a review artifact**. My team has started checking these specs into the repo and code reviewing them together before implementation. It sounds like an extra step, and it is. The cost is front-loaded. But it has more than paid for itself: fewer wrong turns, less rework, and clearer intent for reviewers.
 
@@ -100,12 +102,12 @@ The goal isn't to always use the most sophisticated pattern. It's to match the l
 
 The most common mistake I see is engineers either defaulting to one-shot for everything (resulting in a lot of rework on complex tasks) or overinvesting in elaborate workflows for simple changes. The skill is in the calibration.
 
-## What I'm still figuring out
+## Navigating the trade-offs
 
-This is an honest snapshot, not a finished framework. A few things I'm still working through:
+This is an honest snapshot, not a finished framework. As we use these higher-investment workflows more, a few things I'm still working through:
 
 - **How much to standardize.** These patterns help, but every engineer's workflow is a little different. Push too hard on standardization and you lose the flexibility that makes these tools useful. Too little and everyone's reinventing their own approach from scratch.
-- **Spec review fatigue.** Reviewing AI-generated specs is a different skill than reviewing code. The team is still building that muscle.
-- **Cost management.** Multi-agent workflows can burn through tokens fast. We're getting better at choosing context modes in Conductor (accumulate, last-only, or explicit), but it's still a bit of an art.
+- **Spec review fatigue.** Reviewing AI-generated specs is a different skill than reviewing code. The team is still building that muscle, and determining how much review is "enough" without slowing down development.
+- **Cost management.** Multi-agent workflows can burn through tokens fast. We're getting better at choosing context modes in Conductor (accumulate, last-only, or explicit) depending on the task, but balancing thoroughness with token spend is still a bit of an art.
 
 If you're working on similar patterns, I'd be interested to hear what's working for your team. I'm sharing as I go, rough edges and all.

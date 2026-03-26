@@ -51,7 +51,7 @@ This has been a cultural adjustment. Engineers are used to code review as the qu
 
 For specs, we're using [spec-driven development](/blog/2026-03-21-patterns-for-ai-assisted-development/#3-spec-driven-development) with AI-generated drafts that get human-reviewed. For complex specs, we run them through multi-agent review workflows using [Conductor](/blog/2026-03-20-introducing-an-ai-agent-workflow-conductor/) to catch gaps before the team even sees them. The AI reviewer catches the mechanical stuff (missing edge cases, inconsistencies, vague steps), so the human review can focus on the design decisions.
 
-## What I'd do differently
+## What I've leared
 
 A few things I've learned that I'd apply from day one next time:
 

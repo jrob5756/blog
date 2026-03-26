@@ -15,13 +15,13 @@ My team has been running a project this way recently, and we've learned some thi
 
 Here's the thing that took a while to internalize: when AI makes implementation fast, the bottleneck shifts to coordination. The actual writing of code is no longer the slow part. Figuring out what to build, making sure it's the right thing, and keeping multiple people from stepping on each other's work is where the time goes.
 
-This sounds like it should be obvious. It wasn't, at least not operationally. We've been planning projects the same way we always had, with the same sprint structures. The first few sprints felt chaotic. Engineers were finishing tasks faster than we could plan the next ones. The planning and coordination process became the bottleneck, not the coding.
+The best analogy I've found is driving. The faster you drive, the more attention you need to pay to steering. At 25 mph you can be a little sloppy with the wheel and it's fine. At 120 mph, a small twitch sends you into a wall. AI-assisted development is the same. When your team can go from spec to working code in a day instead of a week, every wrong decision, every misaligned interface, every ambiguous requirement hits you faster and harder in terms of productivity loss. The steering (your coordination, your specs, your design reviews) has to get proportionally better.
 
-Once we named that, we started restructuring around it.
+This sounds like it should be obvious. This is not always the case, at least not operationally. People tend to plan projects the same way they've always had, with the same sprint structures. What we've found is engineers can start finishing tasks faster than you can plan the next ones. The planning and coordination process became the bottleneck, not the coding.
 
 ## Parallel workstreams with clear boundaries
 
-The biggest structural change was breaking the project into parallel workstreams with well-defined boundaries between them. Each workstream owns a vertical slice: its own set of components, its own interfaces, its own tests. The boundaries are defined at the API or contract level so workstreams can move independently.
+The biggest structural change we made on our project was breaking the project into parallel workstreams with well-defined boundaries between them. Each workstream owns a vertical slice: its own set of components, its own interfaces, its own tests. The boundaries are defined at the API or contract level so workstreams can move independently.
 
 This isn't a new idea. Teams have been doing vertical slicing for years. What's different is how aggressively you can lean into it when implementation is fast. A single engineer with a good spec and a coding assistant can move through a workstream at a pace that would have required two or three people before. That changes the math on how you decompose work.
 
@@ -49,14 +49,13 @@ This has been a cultural adjustment. Engineers are used to code review as the qu
 
 ## What we use
 
-For specs, we're using [spec-driven development](/blog/2026-03-21-patterns-for-ai-assisted-development/#3-spec-driven-development-510-minutes) with AI-generated drafts that get human-reviewed. For complex specs, we run them through multi-agent review workflows using [Conductor](/blog/2026-03-20-introducing-an-ai-agent-workflow-conductor/) to catch gaps before the team even sees them. The AI reviewer catches the mechanical stuff (missing edge cases, inconsistencies, vague steps), so the human review can focus on the design decisions.
+For specs, we're using [spec-driven development](/blog/2026-03-21-patterns-for-ai-assisted-development/#3-spec-driven-development) with AI-generated drafts that get human-reviewed. For complex specs, we run them through multi-agent review workflows using [Conductor](/blog/2026-03-20-introducing-an-ai-agent-workflow-conductor/) to catch gaps before the team even sees them. The AI reviewer catches the mechanical stuff (missing edge cases, inconsistencies, vague steps), so the human review can focus on the design decisions.
 
 ## What I'd do differently
 
 A few things I've learned that I'd apply from day one next time:
 
 - **Define workstream boundaries before you define workstream content.** We did it the other way around on the first iteration and ended up with overlapping responsibilities that caused friction.
-- **Spec the interfaces first.** Even before the internal design of a workstream, lock down the contracts between them. This unblocks parallel work immediately.
 - **Budget more time for spec review than you think you need.** It feels slow early on. It saves time later.
 - **Don't let "it's fast to build" become an excuse to skip design.** Speed makes it tempting to just try things. That works for small experiments. For a multi-workstream project, the coordination cost of undoing a bad decision doesn't go down just because coding is faster.
 

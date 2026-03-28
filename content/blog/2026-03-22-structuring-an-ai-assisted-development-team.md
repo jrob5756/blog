@@ -7,7 +7,7 @@ categories: ["engineering"]
 draft: true
 ---
 
-Most of the conversation around AI-assisted development focuses on individual productivity. How can one engineer ship faster, write fewer bugs, automate more of the tedious stuff. But I've been thinking more about the team-level question: when coding speed stops being the constraint, what do you actually change about how a project is structured?
+Most of the conversation around AI-assisted development focuses on individual productivity. How can one engineer ship faster, write fewer bugs, automate more of the tedious stuff? But I've been thinking more about the team-level question: when coding speed stops being the constraint, what do you actually change about how a project is structured?
 
 My team has been running a project this way recently, and we've learned some things. Not all of them obvious.
 
@@ -17,7 +17,7 @@ Here's the thing that took a while to internalize: when AI makes implementation 
 
 The best analogy I've found is driving. The faster you drive, the more attention you need to pay to steering. At 25 mph you can be a little sloppy with the wheel and it's fine. At 120 mph, a small twitch sends you into a wall. AI-assisted development is the same. When your team can go from spec to working code in a day instead of a week, every wrong decision, every misaligned interface, every ambiguous requirement hits you faster and harder in terms of productivity loss. The steering (your coordination, your specs, your design reviews) has to get proportionally better.
 
-This sounds like it should be obvious. This is not always the case, at least not operationally. People tend to plan projects the same way they've always had, with the same sprint structures. What we've found is engineers can start finishing tasks faster than you can plan the next ones. The planning and coordination process became the bottleneck, not the coding.
+It sounds like it should be obvious, but it isn't, at least not operationally. People tend to plan projects the same way they always have, with the same sprint structures. What we've found is that engineers can start finishing tasks faster than you can plan the next ones. The planning and coordination process became the bottleneck, not the coding.
 
 ## Parallel workstreams with clear boundaries
 
@@ -41,7 +41,7 @@ We've been doing cross-workstream spec reviews, where engineers review specs out
 
 ## Investing more in design reviews
 
-This is the part that feels counterintuitive: we're spending *more* time in reviews now, not less. When implementation is fast, the cost of building the wrong thing goes up relative to the cost of building it. A bad spec turns into a bad implementation in an hour instead of a week. The feedback loop is shorter, but the blast radius per bad decision is the same.
+This is the part that feels counterintuitive: we're spending *more* time in reviews now, not less. When implementation is fast, the cost of building the wrong thing goes up relative to the cost of implementation. A bad spec turns into a bad implementation in an hour instead of a week. The feedback loop is shorter, but the blast radius per bad decision is the same.
 
 So we've shifted time from code review to design review. Not that we skip code review, but the ratio has changed. More time arguing about specs, less time arguing about implementation details.
 
@@ -51,7 +51,7 @@ This has been a cultural adjustment. Engineers are used to code review as the qu
 
 For specs, we're using [spec-driven development](/blog/2026-03-21-patterns-for-ai-assisted-development/#3-spec-driven-development) with AI-generated drafts that get human-reviewed. For complex specs, we run them through multi-agent review workflows using [Conductor](/blog/2026-03-20-introducing-an-ai-agent-workflow-conductor/) to catch gaps before the team even sees them. The AI reviewer catches the mechanical stuff (missing edge cases, inconsistencies, vague steps), so the human review can focus on the design decisions.
 
-## What I've leared
+## What I've learned
 
 A few things I've learned that I'd apply from day one next time:
 

@@ -4,7 +4,7 @@ date: 2026-03-22
 description: "What changes about team structure and project planning when coding is no longer the bottleneck."
 tags: ["blog", "ai", "tooling", "engineering"]
 categories: ["engineering"]
-draft: true
+draft: false
 ---
 
 Most of the conversation around AI-assisted development focuses on individual productivity. How can one engineer ship faster, write fewer bugs, automate more of the tedious stuff? But I've been thinking more about the team-level question: when coding speed stops being the constraint, what do you actually change about how a project is structured?

@@ -1,5 +1,5 @@
 ---
-title: "The Architect's Role in the Age of AI Agents"
+title: "The Engineers's Role in the Age of AI Agents"
 date: 2026-04-08
 description: "When AI writes most of the code, the architect's job doesn't shrink. It changes shape."
 tags: ["blog", "ai", "tooling", "engineering"]
@@ -7,21 +7,19 @@ categories: ["engineering"]
 draft: true
 ---
 
-Over the past few weeks I've been writing about how my team works with AI. We built [Conductor](/blog/2026-03-20-introducing-an-ai-agent-workflow-conductor/) for orchestrating multi-agent workflows. We developed [patterns](/blog/2026-03-21-patterns-for-ai-assisted-development/) for matching the right level of AI assistance to the right task. We restructured our [team around specs instead of code](/blog/2026-03-22-structuring-an-ai-assisted-development-team/).
+Over the past few weeks I've been writing about how I've been working with AI. I've been using [Conductor](/blog/2026-03-20-introducing-an-ai-agent-workflow-conductor/) for orchestrating multi-agent workflows. Established [patterns](/blog/2026-03-21-patterns-for-ai-assisted-development/) for matching the right level of AI assistance to the right task. Focused our [team around specs instead of code](/blog/2026-03-22-structuring-an-ai-assisted-development-team/).
 
-Each of those posts described something we tried and what we learned. This one is different. I want to take what I've seen on my team, combine it with what's happening in the industry right now, and make some predictions about where the architect and senior engineer roles are headed. Some of these I'm fairly confident about. Some are bets. I'll try to be clear about which is which.
+Each of those posts described something we tried and what we learned. This one is different. I want to take what I've been using recently, combine it with what's happening in the industry right now, and make some predictions about where software engineer roles are headed.
 
-## The person who says "no" becomes the most valuable person on the team
+## Knowing when to say "no"
 
-Here's the thing that keeps nagging at me. AI coding agents are, by design, agreeable. You tell them to build something and they build it. They don't push back on your approach. They don't say "actually, I think this whole direction is wrong." A [recent analysis](https://hollandtech.net/claude-is-not-your-architect/) called Claude "pathologically agreeable" and argued it should never be trusted with architectural decisions. I think that's roughly right.
+AI coding agents are, by design, agreeable. You tell them to build something and they build it. They don't push back on your approach. They don't say "actually, I think this whole direction is wrong." Rather its the other extreme, "You're ABSOLUTELY right!" A [recent article](https://hollandtech.net/claude-is-not-your-architect/) I came across called Claude "pathologically agreeable." This matches my experience.
 
-This wouldn't matter as much if the humans in the loop were compensating. But there's evidence they're not. A [randomized trial](https://arxiv.org/abs/2604.04721) of 1,222 participants found that just 10 minutes of AI assistance measurably reduced persistence and hurt independent performance on subsequent unassisted tasks. A [METR study](https://www.nytimes.com/2026/03/14/technology/ai-coding-programmers.html) found developers believed AI made them 20% faster while actually being 19% slower. An [Anthropic study](https://addyosmani.com/blog/comprehension-debt/) found developers using AI assistants scored 17% lower on comprehension tasks.
+It wouldn't matter as much if the humans in the loop were effectively redirecting. But when the agent confidently builds whatever you ask for, the path of least resistance is to let it. Saying "stop, we're solving the wrong problem" takes effort, especially when the code already compiles and the tests pass. That person, the engineer who pushes back before the implementation gains momentum, becomes more valuable, not less, in the age of AI.
 
-Put those together and the picture is uncomfortable. The AI won't challenge your assumptions. The humans using it are becoming less persistent and less likely to challenge their own. The person who still thinks critically about whether the approach is right, who says "stop, this is the wrong decomposition" or "we're solving the wrong problem," that person becomes disproportionately valuable.
+On my team, this is why we front-load so much time on brainstorming and spec review. The spec review in particular has become the main place where we catch bad directions. Not because the AI wrote bad code, but because we were about to ask it to write the wrong code really, really fast.
 
-On my team, this is why we front-load so much time on brainstorming and spec review. The spec review in particular has become the main place where we catch bad directions. Not because the AI wrote bad code, but because we were about to ask it to write the wrong code really efficiently.
-
-I think this is where the architect role is headed. Less time designing class hierarchies and API schemas. More time being the person who pressure-tests assumptions before the agents start running. [Stavros Korokithakis](https://www.stavros.io/posts/how-i-write-software-with-llms/) put it well: "I no longer need to know how to write code correctly at all, but it's now massively more important to understand how to architect a system correctly." And [Anthropic's CEO](https://www.reddit.com/r/ArtificialInteligence/comments/1s7jjky/anthropic_ceo_i_have_engineers_within_anthropic/) says he has engineers who write zero code and just review what Claude produces. But someone still has to decide what Claude should be building. That's the architect.
+I think this is where the engineers role is headed. Less time writing functions. More time pressure-testing assumptions before the agents start running. [Stavros Korokithakis](https://www.stavros.io/posts/how-i-write-software-with-llms/) put it well: "I no longer need to know how to write code correctly at all, but it's now massively more important to understand how to architect a system correctly." And [Anthropic's CEO](https://www.reddit.com/r/ArtificialInteligence/comments/1s7jjky/anthropic_ceo_i_have_engineers_within_anthropic/) says he has engineers who write zero code and just review what Claude produces. The "engineer" role is shifting from implementation to oversight and architecture. Knowing when to say "no" or "that doesn't sound quite right" is becoming a core engineering skill.
 
 ## Speed makes the steering matter more, not less
 

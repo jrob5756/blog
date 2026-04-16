@@ -4,7 +4,7 @@ date: 2026-04-10
 description: "AI changed what engineers spend their time on. The skills that separate engineers who thrive from those still catching up."
 tags: ["blog", "ai", "tooling", "engineering"]
 categories: ["engineering"]
-draft: true
+draft: false
 ---
 
 AI has made engineers more productive. There's no doubt about that. What's changed is where the time goes. The hands-on coding that used to dominate our day is shrinking, and everything around it, such as planning, design, and review, is expanding to fill the gap. The role is completely shifting.
@@ -17,7 +17,7 @@ In the past, an engineer who wasn't keeping up with the latest trends could stil
 
 The tools are changing monthly. The patterns for how to use them are changing just as quickly. Six months ago, I hadn't even considered multi-agent review workflows. Now those are default parts of how I work. 
 
-The good news is that curiosity compounds. Each new thing you learn makes the next thing easier to adopt, because you've built intuition for how these tools behave and where they break down. The flip side is that standing still is more expensive than it used to be. If you're waiting for someone to hand you a playbook, you'll be learning patterns that the curious engineers on your team moved past months ago.
+The good news is that curiosity compounds. Each new thing you learn makes the next thing easier to adopt, because you've built intuition for how these tools behave and where they break down. On the other hand, standing still is more expensive than it used to be. I wouldn't recommend waiting for the dust to settle. It's not settling.
 
 ## Bias toward action
 
@@ -29,21 +29,19 @@ Be honest with yourself about what's working, though. A [METR study](https://met
 
 ## Systems design mindset
 
-Coding is no longer the hard part. For most tasks, a good coding assistant can produce a working implementation faster than you can type it. Where engineers still provide the most value is in the architectural decisions: whether the code is maintainable, scalable, and correct at the system level.
+Coding is no longer the hard part. For most tasks, a good coding assistant can produce a working implementation faster than you can type it. Where engineers still provide the most value is in the architectural decisions, e.g, whether the code is maintainable, scalable, and correct at the system level.
 
-When I wrote about [structuring a team around AI-assisted development](/blog/2026-03-22-structuring-an-ai-assisted-development-team/), one of the takeaways was that speed without direction is just expensive rework. Prototyping an implementation is cheap and reversible. But committing to the wrong abstraction, the wrong service boundary, or the wrong data model cascades through everything that gets built on top of it. That's where getting it right upfront matters more than ever.
-
-Systems design is what separates engineers now. Can you decompose a problem into the right components? Can you define clean interfaces between them? Can you spot the places where two subsystems will interact poorly? These are the questions that matter, and AI will overlook them if you don't provide the right context.
+Systems design is more important than ever. Prototyping an implementation is cheap and reversible. But committing to the wrong abstraction, the wrong service boundary, or the wrong data model cascades through everything that gets built on top of it. That's where getting it right upfront matters more than ever, and AI will overlook these decisions (or make assumptions) if you don't guide it carefully.
 
 I'd encourage every engineer to get comfortable spending what feels like "too much" time on the design step. Sketch the components, define the interfaces, talk through the failure modes, review it with a peer. Then hand the spec to your coding assistant. The code will be better, the rework will be less, and the system will hold together under pressure.
 
 ## Reviewing with intent
 
-Every time you accept a suggestion, approve a plan, or commit AI-generated code, you're doing a code review. It's no longer just a PR gate, it's part of your inner loop. This constant oversight matters more than ever because the volume of code is exploding. A [SlopCodeBench study](https://arxiv.org/abs/2603.24755) found that agent-generated code is 2.2x more verbose than human-written code, and quality degrades with each iteration. If you aren't paying close attention, you'll quickly build up what Addy Osmani from Google calls [comprehension debt](https://addyosmani.com/blog/comprehension-debt/): the gap between how much code exists and how much any human genuinely understands.
+Every time you accept a suggestion, approve a plan, or commit AI-generated code, you're doing a code review. It's no longer just a PR gate, it's part of your inner loop. This constant oversight matters more than ever because the volume of code is increasing exponentially. A [SlopCodeBench study](https://arxiv.org/abs/2603.24755) found that agent-generated code is 2.2x more verbose than human-written code, and quality degrades with each iteration. Let your agents loose untethered and you'll build up what Addy Osmani from Google calls [comprehension debt](https://addyosmani.com/blog/comprehension-debt/): the gap between how much code exists and how much any human genuinely understands.
 
-The key is reviewing at the right level. Nits are fine, but they're not where the value is... maybe they never were. The important questions are structural: does this follow the patterns we've established? Is the abstraction right? Are there hidden coupling points? Does this fit into the system, or does it just solve the immediate problem in a vacuum? A model doesn't understand your system's history or conventions unless you've given it that context, so these are the questions that are important to focus on.
+So how can we review all this code without drowning in it? Review at the right level. Nits are fine, but they're not where the value is... maybe they never were. The important questions are structural: does this follow the patterns we've established? Is the abstraction right? Are there hidden coupling points? Does this fit into the system, or does it just solve the immediate problem in a vacuum? When I wrote about [structuring a team around AI-assisted development](/blog/2026-03-22-structuring-an-ai-assisted-development-team/), we found that shifting review time from implementation details to design and architecture was one of the highest-leverage changes we made.
 
-## Calibration
+## Pattern matching
 
 In [a previous post](/blog/2026-03-21-patterns-for-ai-assisted-development/), I wrote about four patterns for AI-assisted development: one-shot, plan mode, spec-driven, and multi-agent workflows. Each is appropriate for a different level of task complexity.
 
@@ -51,7 +49,7 @@ Over time, this should become second nature. A simple function rename gets a one
 
 The most common failure mode is defaulting to one-shot for everything. It works great for small tasks, but for anything with real design decisions, skipping the planning step means the AI is making architectural choices on your behalf without you even noticing. The second most common failure mode is over-engineering: running a full multi-agent pipeline for a task that needed a two-line edit.
 
-The skill is calibration. Knowing when a task deserves more investment upfront and when it doesn't. That judgment comes from experience, and the only way to build it is practice.
+The skill is pattern matching. Knowing when a task deserves more investment upfront and when it doesn't. That judgment comes from experience, and the only way to build it is practice.
 
 ## The common thread
 
@@ -59,4 +57,6 @@ All of these skills point in the same direction. The value an engineer provides 
 
 None of this means the fundamentals stop mattering. You still need to understand data structures, concurrency, system design, and debugging. In many ways, you need to understand them more deeply, because you're now reviewing and steering code rather than writing it line by line. 
 
-The tools will keep changing. The models will keep getting better. But the essence of the job is still engineering. Contrary to what you may be hearing, that's not going anywhere. There's just a lot less typing, and a lot more thinking.
+The tools will keep changing. The models will keep getting better. But the essence of the job is still engineering. Contrary to what you may be hearing, that's not going anywhere. There's just a lot less typing, and a lot more thinking
+
+... Happy coding!

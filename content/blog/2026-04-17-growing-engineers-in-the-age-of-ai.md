@@ -7,9 +7,11 @@ categories: ["engineering"]
 draft: true
 ---
 
-A recent LinkedIn article on [redefining the software engineering profession](https://www.linkedin.com/pulse/redefining-software-engineering-profession-gy74e/) raised a question I've been thinking about for a while: what happens to early-in-career engineers when AI changes the shape of the job?
+Mark Russinovich and Scott Hanselman recently published a piece in Communications of the ACM called ["Redefining the Software Engineering Profession for AI"](https://cacm.acm.org/opinion/redefining-the-software-engineering-profession-for-ai/) that focuseson what happens to early-in-career (EiC) engineers when AI changes the shape of the job?
 
-The concern is real. AI coding assistants have made it possible to produce working code without deeply understanding the system it runs in. For experienced engineers, that's a productivity multiplier. We already have the mental models for how systems fit together, how failures cascade, and where abstractions leak. AI handles the mechanical parts while we focus on the decisions that matter. But for someone just starting out, who hasn't built those mental models yet, the same tools can become a crutch that delays the learning they need most.
+Their thesis is straightforward. AI is acting as what they call "seniority-biased technological change." It disproportionately amplifies engineers who already have systems judgment, architectural taste, debugging intuition, and operational awareness. Senior engineers get an enormous productivity boost. EiC developers who lack that hard-won knowledge struggle to contribute meaningfully, because they can't steer, verify, or integrate AI output the way experienced engineers can.
+
+I think they're right. And one meaningful way we can help starts with how we structure the work.
 
 ## The experience gap
 
@@ -21,6 +23,8 @@ When I think about what separates a senior engineer from a junior one, it's rare
 - **Operational thinking.** How will this behave under load? What happens when a downstream dependency goes down? How do we observe this in production?
 
 None of this is taught effectively by reading docs or watching tutorials. It's learned by doing, by making mistakes, and by working alongside people who've made those mistakes before. The problem is that AI tools can now generate plausible-looking code that sidesteps all of these considerations. An early-in-career engineer can ship a feature that works in dev and collapses under real-world conditions, and the feedback loop that would have taught them something gets short-circuited.
+
+This is the core of the problem. The agents aren't bad. They're just not a substitute for the judgment that comes from experience. And if we don't create structures that help EiC developers build that judgment, we end up with a generation of engineers who can produce code but can't evaluate whether it's the right code.
 
 ## Moving fast in the wrong direction
 
@@ -70,10 +74,8 @@ A few things we've learned about running this effectively:
 
 ## The bigger picture
 
-The industry conversation around AI and early-in-career developers often frames it as a binary: either AI replaces junior roles entirely, or juniors need to "level up" to stay relevant. I don't think either framing is right. The fundamentals of software engineering haven't changed. Systems design, distributed systems thinking, operational awareness, all of that still matters as much as it ever did. What's changed is the path to learning it.
+The paper makes a strong case for formal mentorship programs at scale. I 100% agree. But you don't need a formal program to start today! You just need to be intentional about helping EiC developers build the judgment that experience used to provide on its own.
 
-In [The Skills That Matter Now](/blog/2026-04-10-the-skills-that-matter-now/), I argued that the value engineers provide is shifting from the mechanical to the architectural. That's true, but it leaves open the question of how early-in-career engineers develop those architectural skills when AI is handling the mechanical work that used to be their training ground.
+Spec-driven development with active review is one practical way to do that. It doesn't require a new org structure. It just requires senior engineers to invest time in reviewing design decisions with their junior teammates before implementation starts. I've been practicing this on my current projects and it's not perfect. The specs aren't always the right level of detail, and I'm still figuring out the right cadence. But EiC engineers are asking better questions, catching more of their own design gaps, and building intuition faster than they would from code review alone.
 
-Spec-driven development with active review is one answer. It creates a structured space for the mentorship conversations that used to happen informally. It lets early-in-career engineers move fast (because AI still handles the implementation) while moving in the right direction (because a senior engineer reviewed the design before implementation started). And it teaches the concepts that matter most: systems thinking, tradeoff analysis, and design reasoning.
-
-The tools will keep changing. The models will keep getting better. But the need to grow engineers who understand *why* a system should be built a certain way, not just *how* to build it, isn't going anywhere. That's on us as senior engineers. The best time to invest in it is now.
+As I've said before, the tools will keep changing. The need to grow engineers who understand *why* a system should be built a certain way (or not at all), not just *how* to build it, isn't going anywhere. That's on us. More to come as I learn what works.

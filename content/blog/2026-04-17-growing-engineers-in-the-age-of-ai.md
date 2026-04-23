@@ -9,7 +9,7 @@ draft: true
 
 Mark Russinovich and Scott Hanselman recently published a piece in Communications of the ACM called ["Redefining the Software Engineering Profession for AI."](https://cacm.acm.org/opinion/redefining-the-software-engineering-profession-for-ai/) Their central question is what happens to early-in-career engineers when AI changes the shape of the job?
 
-Their thesis is straightforward. AI is acting as what they call "seniority-biased technological change." It disproportionately amplifies engineers who already have systems judgment, architectural taste, debugging intuition, and operational awareness. Senior engineers get an enormous productivity boost. Early-in-career developers who lack that hard-won knowledge struggle to contribute meaningfully, because they can't steer, verify, or integrate AI output the way experienced engineers can.
+Their thesis is straightforward. Generative AI acts as what they call "seniority-biased technological change." It gives a massive boost to engineers who already know where to draw boundaries, what to watch for in production, and how to tell good output from plausible output. Engineers who haven't built that intuition yet are left trying to steer something they don't fully understand.
 
 I think they're right, and one meaningful way we can help starts with how we structure the work.
 
@@ -17,7 +17,7 @@ I think they're right, and one meaningful way we can help starts with how we str
 
 What separates a senior engineer from a junior one isn't code or language knowledge. It's the accumulated intuition from years of building, breaking, and fixing systems. Where to draw service boundaries, how to model data for real access patterns, what happens when a dependency goes down, why "it works on my machine" means almost nothing. That knowledge was always learned by doing, by making mistakes alongside people who'd made those mistakes before. AI short-circuits the feedback loop. An early-in-career engineer can now ship a feature that passes tests but collapses under real-world conditions, and the experience that would have come from struggling through the implementation never happens.
 
-In [a previous post](/blog/2026-04-10-the-skills-that-matter-now/), I wrote about how the value an engineer provides is shifting from the mechanical to the architectural. That shift is hardest on the people who haven't had time to develop architectural judgment yet. They're being asked to steer at high speed before they've learned how to drive. This isn't a criticism of them. They're doing exactly what the tools encourage by moving fast and shipping. The problem is that without the right support structure, moving fast can mean moving fast in the wrong direction.
+In [a previous post](/blog/2026-04-10-the-skills-that-matter-now/), I wrote about how the value an engineer provides is shifting from the mechanical to the architectural. That shift is hardest on the people who haven't had time to develop architectural judgment yet. They're being asked to steer at high speed before they've learned how to drive. This isn't a criticism of them. They're doing exactly what the tools encourage by moving fast. The problem is that without the right support structure, moving fast can mean moving fast in the wrong direction.
 
 ## Spec-driven development as a mentorship tool
 
@@ -25,9 +25,9 @@ I've written before about [spec-driven development](/blog/2026-03-21-patterns-fo
 
 Here's how we've been using it with early-in-career engineers on my team:
 
-1. **The engineer writes the spec, not the code.** Before touching any implementation, they produce a markdown document that describes what they're building, how it fits into the system, what the interfaces look like, and what failure modes they've considered.
+1. **The engineer writes the spec.** Before touching any implementation, they produce a markdown document that describes what they're building, how it fits into the system, what the interfaces look like, and what failure modes they've considered. AI tools help with the scaffolding, but the engineer has to make the design calls.
 2. **The spec becomes a PR.** They check it into the repo and open a pull request, just like they would for code.
-3. **We review it together.** Not just asynchronously with comments, but also in a live conversation. We walk through the design decisions, I ask questions about tradeoffs they may not have considered, and we talk through alternatives.
+3. **We review it together.** Not just asynchronously with comments, but also in a live conversation. We walk through the design decisions, discuss tradeoffs they may not have considered, and we talk through alternatives.
 
 The magic is in step three. When you review a spec together, you're having the kind of conversation that used to happen organically over years of working alongside senior engineers. "Why did you put this boundary here?" "What happens if this service is unavailable?" "Have you thought about how this data model handles the query patterns from the dashboard?" These are the questions that build architectural intuition, and they're much easier to have over a one-page spec than once the code is already written.
 

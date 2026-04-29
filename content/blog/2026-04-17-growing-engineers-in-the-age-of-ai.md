@@ -1,13 +1,13 @@
 ---
 title: "Growing Engineers in the Age of AI"
 date: 2026-04-17
-description: "AI changed how we write code, but it didn't change what makes a great engineer. Early-in-career developers need mentorship more than ever, and spec-driven development is one of the best ways to provide it."
+description: "AI changed how we write code, but it didn't change what makes a great engineer. Early-in-career engineers need mentorship more than ever, and spec-driven development is one of the best ways to provide it."
 tags: ["blog", "ai", "engineering", "mentorship"]
 categories: ["engineering"]
-draft: true
+draft: false
 ---
 
-Mark Russinovich and Scott Hanselman recently published a piece in Communications of the ACM called ["Redefining the Software Engineering Profession for AI."](https://cacm.acm.org/opinion/redefining-the-software-engineering-profession-for-ai/) Their central question is what happens to early-in-career engineers when AI changes the shape of the job?
+Mark Russinovich and Scott Hanselman recently published a paper in Communications of the ACM called ["Redefining the Software Engineering Profession for AI."](https://cacm.acm.org/opinion/redefining-the-software-engineering-profession-for-ai/) Their central question is what happens to early-in-career engineers when AI changes the shape of the job?
 
 Their thesis is straightforward. Generative AI acts as what they call "seniority-biased technological change." It gives a massive boost to engineers who already know where to draw boundaries, what to watch for in production, and how to tell good output from plausible output. Engineers who haven't built that intuition yet are left trying to steer something they don't fully understand.
 
@@ -25,7 +25,7 @@ I've written before about [spec-driven development](/blog/2026-03-21-patterns-fo
 
 Here's how we've been using it with early-in-career engineers on my team:
 
-1. **The engineer writes the spec.** Before touching any implementation, they produce a markdown document that describes what they're building, how it fits into the system, what the interfaces look like, and what failure modes they've considered. AI tools help with the scaffolding, but the engineer has to make the design calls.
+1. **The engineer writes the spec.** Before touching any implementation, they produce a markdown document that describes what they're building, how it fits into the system, what the interfaces look like, and what failure modes they've considered. AI tools (speckit, GSD, etc.) can help with the scaffolding, but the engineer has to make the design calls.
 2. **The spec becomes a PR.** They check it into the repo and open a pull request, just like they would for code.
 3. **We review it together.** Not just asynchronously with comments, but also in a live conversation. We walk through the design decisions, discuss tradeoffs they may not have considered, and we talk through alternatives.
 
@@ -35,13 +35,11 @@ The feedback is also cheaper to act on. Changing a paragraph in a spec is trivia
 
 ## Why this works better than code review alone
 
-Traditional code review is still valuable, but it has limitations as a teaching tool. By the time code exists, the big decisions have already been made. Reviewing a PR and saying "the service boundary should be different" is demoralizing when someone just spent two days building it. The sunk cost makes it harder to change direction, and the feedback arrives too late to shape the thinking.
+In a previous post, I made the case for [shifting time from code review to design review](/blog/2026-03-22-structuring-an-ai-assisted-development-team/). For early-in-career engineers, that shift is even more impactful, for two reasons.
 
-Spec review flips the timing. The investment is small (a document, not an implementation), so changing direction is painless. The conversation happens at the design level, where the most important learning occurs. Because there's no code to defend, the engineer is more open to exploring alternatives.
+First, there's no code to defend. When someone has spent two days building something, telling them the service boundary should be different is demoralizing. With a spec, changing direction is painless. The engineer is more open to exploring alternatives when the investment is a document, not an implementation.
 
-I've also found that writing specs forces a kind of clarity that coding doesn't. When you're writing code, it's easy to let the implementation details carry you forward without articulating why you made a particular choice. A spec requires you to explain your reasoning in plain language. That act of explanation surfaces gaps in understanding that would otherwise stay hidden until production.
-
-When I wrote about [structuring a team around AI-assisted development](/blog/2026-03-22-structuring-an-ai-assisted-development-team/), I talked about how we shifted time from code review to design review. For early-in-career engineers, that shift is even more impactful. The design conversation is where the mentorship actually happens.
+Second, writing a spec forces a kind of clarity that coding doesn't. It's easy to let implementation details carry you forward without articulating why you made a particular choice. A spec requires you to explain your reasoning in plain language. That act of explanation surfaces gaps in understanding that would otherwise stay hidden until production.
 
 ## Making it practical
 
@@ -57,7 +55,7 @@ A few things we've learned about running this effectively:
 
 ## The bigger picture
 
-The paper makes a strong case for formal preceptorship programs at scale. I 100% agree. But you don't need a formal program to start today! You just need to be intentional about creating the conditions where early-in-career engineers build judgment, not just ship code.
+The paper makes a strong case for formal preceptorship programs at scale. I 100% agree... and you don't need a formal program to start today! You just need to be intentional about creating the conditions where early-in-career engineers build judgment, not just ship code.
 
 Spec-driven development with active review is one practical way to do that. It doesn't require a new org structure or a training budget. It requires senior engineers to invest time in reviewing design decisions with their early-in-career teammates before implementation starts. That investment scales one relationship at a time, which is both its strength and its limitation. You can't mentor a hundred people this way. But you can make sure the five or ten engineers closest to you are building real intuition, not just fluency with a coding assistant.
 

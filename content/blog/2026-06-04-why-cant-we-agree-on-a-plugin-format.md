@@ -36,9 +36,9 @@ A few people are reaching for [**symlinks**](https://understandingdata.com/posts
 
 These are all really cool projects. They just don't solve the specific thing I was hitting: I wanted to author a complete plugin (skills, agents, hooks, MCP, plus the marketplace metadata) once, and let each tool's native `/plugin install` flow consume it without me hand-editing four versions every time something changed.
 
-## The template
+## The template repo
 
-[`plugin-marketplace-template`](https://github.com/jrob5756/plugin-marketplace-template) is a GitHub template repo. You click "Use this template," get your own copy, and that copy is a working plugin marketplace from day one. It's a template because it doesn't actually contain any plugins, just the scaffolding to make it easy to add your own and keep them in sync across tools.
+[`plugin-marketplace-template`](https://github.com/jrob5756/plugin-marketplace-template) is a GitHub template repository I created to help eliminate some of this toil. You click "Use this template," get your own copy, and that copy is a working plugin marketplace from day one. It's a template because it doesn't actually contain any plugins, just the scaffolding to make it easy to add your own and keep them in sync across tools.
 
 You author each plugin once:
 

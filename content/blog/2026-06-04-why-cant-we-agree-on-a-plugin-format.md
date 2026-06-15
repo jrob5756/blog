@@ -4,7 +4,7 @@ date: 2026-06-04
 description: "A small template repo for authoring AI coding plugins in a tool-agnostic format and transpiling them into Claude Code, Copilot CLI, OpenCode, and Codex bundles."
 tags: ["blog", "ai", "tooling", "open-source"]
 categories: ["engineering"]
-draft: true
+draft: false
 ---
 
 I switch between coding assistants from time to time. Sometimes it's Claude Code, sometimes it's GitHub Copilot CLI, or occasionally I'm playing with OpenCode on a side project. Each one is good at different things, and I like having the option to switch between them.

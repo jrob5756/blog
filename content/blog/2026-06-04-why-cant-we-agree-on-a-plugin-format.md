@@ -19,8 +19,8 @@ The problem is that every tool has its own packaging format:
 
 - **Claude Code** wants a `.claude-plugin/` directory, a `marketplace.json` registry, and skill/agent markdown files with very specific frontmatter.
 - **Copilot CLI** wants a `plugin.json` manifest with its own schema, plus a `.github/plugin/marketplace.json` registry to be discoverable.
-- **OpenCode** has no marketplace concept at all. Each plugin is just files you drop into a project's `.opencode/` folder.
 - **Codex CLI** uses yet another layout under `~/.codex/`.
+- **OpenCode** has no marketplace concept at all. Each plugin is just files you drop into a project's `.opencode/` folder.
 
 The differences are small on their own (a field gets renamed in one tool, a directory moves in another, frontmatter keys swap around), but copy-pasting one plugin into the layout another tool expects still takes about fifteen minutes of fiddly editing every time. And I have to do it again on each of my dev machines. Multiply by a few plugins and the friction adds up fast... and then when I want to switch back... well, you get the idea.
 
@@ -76,7 +76,7 @@ Once you've created your marketplace from the template, point each tool at it:
 /plugin install my-skill@my-plugins
 ```
 
-**Copilot CLI** follows the same flow. Register the marketplace, then install.
+**Copilot CLI** and **Codex CLI** follow the same flow. Register the marketplace, then install.
 
 **OpenCode** has no marketplace concept, but each `dist/opencode/<plugin>/` folder ships with a README explaining how to drop it into a project's `.opencode/` directory.
 

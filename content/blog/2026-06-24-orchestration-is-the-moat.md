@@ -1,6 +1,6 @@
 ---
 title: "Orchestration Is the Moat"
-date: 2026-06-16
+date: 2026-06-24
 description: "As frontier models get cheaper and more interchangeable, the useful work moves into routing, review loops, and context control."
 tags: ["blog", "ai", "tooling", "engineering"]
 categories: ["engineering"]

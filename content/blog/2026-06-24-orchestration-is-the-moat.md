@@ -7,19 +7,19 @@ categories: ["engineering"]
 draft: true
 ---
 
-There is a benchmark result that I found interesting.
+OpenRouter ran an experiment that provides an interesting perspective as the focus has been squarely on Fable, GLM, etc. these past few weeks
 
-OpenRouter shipped [Fusion](https://openrouter.ai/openrouter/fusion), a compound API that sends the same prompt to several models in parallel, then uses a judge model to combine their answers. The result beat a single frontier model, but that was not the part that stuck with me. According to OpenRouter's writeup, roughly **75% of the performance gain came from the synthesis and judge step**, not from having a more diverse panel of models. A budget panel of cheaper models came within 1% of a solo frontier model at about half the cost.
+They shipped [Fusion](https://openrouter.ai/openrouter/fusion), a compound API that fans the same prompt out to several models in parallel, then uses a judge model to merge the answers. This strategy beat a single frontier model, but the interesting part is *why*. According to OpenRouter's writeup, roughly **75% of the performance gain came from the synthesis and judge step**, not from having a more diverse panel of models. A panel of cheaper models came within 1% of a solo frontier model at about half the cost.
 
-Most of the lift came from the orchestration, not the models.
-
-That feels more useful than another round of model leaderboard news. It says something practical about where builders should spend their time.
+Most of the lift came from the orchestration, not the models themselves... which is interesting
 
 ## The models are commoditizing
 
-The backdrop makes the Fusion result land harder. ChatGPT's market share [slipped below 50%](https://techcrunch.com/2026/06/16/chatgpts-market-share-slips-below-50-for-first-time/) for the first time. OpenAI is [considering price cuts](https://www.cnbc.com/2026/06/11/openai-mulls-slashing-prices-ahead-of-competition-from-anthropic-wsj.html) to stay competitive. Microsoft shipped [seven MAI models](https://microsoft.ai/news/building-a-hillclimbing-machine-launching-seven-new-mai-models/) built from scratch. Open-weight models keep closing the gap, and local models are now good enough that people run them for daily work.
+The backdrop makes the Fusion result land harder. The clearest signal is the open-weight side. Z.ai's [GLM-5.2](https://www.interconnects.ai/p/glm-52-is-the-step-change-for-open) shipped with MIT-licensed weights and benchmark scores strong enough that some are calling a step change for open weight models. It is good enough that people are now making the case that there's [minimal downside to switching to open models](https://www.marble.onl/posts/cancel_claude.html), drawing the analogy to the move from Windows to Linux. It's not an isolated result either: [VibeThinker](https://arxiv.org/abs/2606.16140), a 3-billion-parameter model, reportedly beats Opus 4.5 on reasoning benchmarks. When a model you can download and run yourself is topping leaderboards, the "frontier" stops being a place only a couple of labs can reach.
 
-When four or five vendors are all shipping near-frontier capability and racing each other down on price, the raw model stops looking like a moat. It starts looking like compute or bandwidth: important, expensive if you waste it, but not where your product becomes hard to copy.
+The caveat is that the absolute top is still proprietary. Anthropic's Fable and Mythos remain the bar everyone else is measured against, and GLM-5.2 is closing the gap with some of the less capabile frontier models. But "closing the gap" is exactly the point. When four or five vendors are all shipping near-frontier capability and racing each other down on price, the raw model stops looking like a moat. It starts looking like compute or bandwidth: important, expensive if you waste it, but not where your product becomes hard to copy.
+
+Fusion isn't the only signal here. Sakana AI just shipped [Fugu](https://venturebeat.com/orchestration/no-claude-fable-5-no-problem-sakana-achieves-frontier-performance-with-new-fugu-multi-model-auto-synthesis-system), a multi-agent orchestration system that exposes a single OpenAI-compatible API while internally routing each query across a swappable pool of models. Sakana claims its top tier matches Anthropic's Fable and Mythos on benchmarks. In Fugu's case, the orchestration layer is itself a *trained* model that learns how to assemble the scaffold per query, rather than hand-coded routing. Different mechanism than Fusion's panel-plus-judge, but the same conclusion. The structure and orchestration are the impactful parts, and the underlying models underneath become interchangeable.
 
 The Fusion result gives one answer. Spend less time worshipping the model choice and more time on the structure around it: the routing, the review loops, and the control over what context each step sees. That is the part you can actually own.
 

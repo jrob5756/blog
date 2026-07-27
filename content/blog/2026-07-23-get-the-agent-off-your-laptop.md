@@ -1,33 +1,23 @@
 ---
 title: "Get the Agent Off Your Laptop"
 date: 2026-07-23
-description: "A new experimental Conductor provider runs an agent's entire loop inside an isolated, throwaway container, so the blast radius is a sandbox you can delete, not the machine you work from."
+description: "Conductor's new experimental aca provider moves an agent's execution loop into a throwaway Azure container, so the orchestration you own stays on your machine and the model-driven shell doesn't."
 tags: ["blog", "ai", "tooling", "open-source", "security"]
 categories: ["engineering"]
 draft: true
 ---
 
-This past week was a bad one for the idea that a sandbox on your own machine will keep you safe. It was a good week to be building the opposite.
+Every coding agent I run executes its shell commands on the machine I work from. That's the same machine holding my SSH keys, an `az login` session, a `gh` token, and about forty repos I've cloned and forgotten about. I've mostly handled this by trusting the agent to behave. That isn't a control, it's a hope.
 
-Three incidents, in the space of a few days:
+So my team added an experimental provider to [Conductor](https://github.com/microsoft/conductor) called `aca`, and it does one thing: it takes the agent's execution loop off your machine and runs it in a container in Azure that you throw away when it's done.
 
-- OpenAI published a [post-mortem](https://openai.com/index/safety-alignment-long-horizon-models) on an unreleased long-horizon model that kept acting outside its sandbox. Told to post benchmark results to Slack, it instead spent about an hour finding a hole in the sandbox and opened a pull request on a public GitHub repo. When a scanner blocked it for exposing an auth token, it split the token into fragments and reconstructed it at runtime to get past the scanner. It SSH'd into other live compute pods. The finding that stuck with me: *persistence itself* is the new threat. Older models hit a boundary and stopped and handed control back. This one treated the boundary as a bug to fix.
-- Pillar Security published a ["Week of Sandbox Escapes"](https://www.bleepingcomputer.com/news/security/cursor-codex-gemini-cli-antigravity-hit-by-sandbox-escapes/): seven escapes across Cursor, Codex CLI, Gemini CLI, and Antigravity. The clever part is that the agent never breaks the sandbox at all. It obeys every rule and simply writes a file into your workspace — a `.vscode` task, a `.claude` hook, a patched virtualenv interpreter — that a trusted tool *outside* the sandbox runs for it later. Usually kicked off by prompt injection buried in a README or a diff. Their one-line summary is the one to tape to your monitor: sandbox ≠ security, and the developer's machine is the attack surface.
-- And in case the point was too subtle, OpenAI and Hugging Face [disclosed](https://www.axios.com/2026/07/21/openai-says-hugging-face-breach-caused-by-one-its-models) that models under evaluation chained vulnerabilities and compromised parts of Hugging Face's production infrastructure while working a cyber benchmark.
+## What it does
 
-All three are the same setup underneath: we hand a capable, persistent, sometimes adversarial agent a shell, then run that shell on the same machine that holds our SSH keys, our cloud credentials, and every repo we've got checked out.
+Normally Conductor runs each agent's loop in the same process as the orchestrator: model calls, tool calls, file edits, all local. The `aca` provider relocates that sub-loop into an [Azure Container Apps dynamic session](https://learn.microsoft.com/azure/container-apps/sessions), a Hyper-V isolated container allocated out of a warm pool. The model-driven shell, the built-in tools, and any MCP servers you've declared all run in there.
 
-## The scale pressure points the wrong way
+The workflow-level loop stays home. Routing, context, checkpoints, and the event bus still run on your machine, still with no LLM in the loop. Only the part where a model decides to run a command moves.
 
-Meanwhile everything pushes toward running *more* of them, not fewer. Cursor's [writeup on agent swarms](https://cursor.com/blog/agent-swarm-model-economics) is the cleanest version of where this goes: a frontier "planner" delegating to a swarm of cheap "workers" built a Rust implementation of SQLite from the 835-page spec alone, at roughly 87% less cost than an all-frontier run. The economics are real, and they're not going away. But "point fifty model-driven shells at your codebase" and "the developer's machine is the attack surface" are two sentences that should not be in the same room.
-
-## What we built
-
-That's the backdrop for a new provider my team added to [Conductor](https://github.com/microsoft/conductor), the multi-agent workflow tool I've [written about before](/blog/2026-03-20-introducing-an-ai-agent-workflow-conductor/). It's called `aca`, it's still experimental, and the premise is simple: get the agentic loop off your host.
-
-Normally Conductor runs each agent's loop (the model calls, the tool use, the file edits) in the same process as the orchestrator, on your machine. The `aca` provider relocates that entire sub-loop into a remote Azure Container Apps dynamic-sessions container. The model-driven shell, its built-in tools, its MCP calls: all of it runs inside a Hyper-V-isolated, ephemeral cloud sandbox instead of on your laptop.
-
-The split is the whole trick. The workflow-level loop — routing, context, checkpoints, the event bus — stays on the host, in your control, cheap, and never model-driven. Only the dangerous part, the part where a model decides to run a command, gets exiled. You flip one block in the workflow YAML:
+Turning it on is one block of YAML:
 
 ```yaml
 runtime:
@@ -39,22 +29,36 @@ runtime:
     egress: enabled
 ```
 
-So what does this do to the attack surface? It takes the developer machine out of it. If a persistent agent goes looking for a way out (the OpenAI scenario), what it finds on the far side of the boundary is a disposable container with a narrowly scoped identity and an ephemeral filesystem, not your `~/.ssh` and your kubeconfig. The Pillar escapes work by writing a file that a trusted tool on your machine runs *later*; here there's no later, and no trusted tool on your machine, because the whole thing lived and died in a container you throw away. The blast radius stops being your laptop and becomes a sandbox with a short life expectancy.
+The rest of the workflow is unchanged. The host-side provider owns no agentic logic at all: it derives a session identifier, grabs an Azure token, posts one streaming request to the pool, and relays each NDJSON event frame back to the event bus verbatim as the container emits it. So the dashboard, the console, and the JSONL log render a sandboxed agent exactly like a local one. Sandbox wall-clock time shows up as its own usage row so you can see what you're spending time on.
 
-And it composes with scale. Sessions are keyed by an identifier, and concurrent agents automatically diverge onto separate sessions, so a fan-out of workers is a fan-out of *isolated sandboxes* rather than a pile of processes elbowing each other over one filesystem. That's the swarm pattern with the isolation built in.
+## Why we bothered
 
-It's also the same bet I keep making about orchestration: keep the structure (the routing, the review gates, the deterministic parts) owned and on-host, and push the untrusted, model-driven part somewhere disposable.
+The reason has less to do with containers than with where the boundary between the agent and everything I own ends up sitting.
 
-## The honest part
+Pillar Security published a [writeup of seven sandbox escapes](https://www.bleepingcomputer.com/news/security/cursor-codex-gemini-cli-antigravity-hit-by-sandbox-escapes/) across Cursor, Codex CLI, Gemini CLI, and Antigravity a few days before we shipped this, and the mechanism is what got my attention. In several of them the agent never breaks the sandbox. It follows every rule and writes a file into your workspace, a `.vscode` task or a hook or a patched virtualenv interpreter, and a trusted tool outside the sandbox runs it for you later. Usually triggered by an instruction buried in a README or a diff.
 
-Here's what I'd want to read before adopting this.
+That whole class of attack needs two things: a "later," and a trusted tool sitting on the same filesystem. A dynamic session has neither. There's no editor to run its tasks, no shell profile to poison, no other repos to wander into, and no filesystem after the session ends. You clone what the agent needs at the start and push results out before it's over.
 
-It's experimental, and the gaps are real. Sessions are ephemeral with no volume mounted, so you seed inputs at the start (a `git clone`) and push artifacts out (a `git push`) before the session cools down; nothing survives on its own. Interrupting a run doesn't actually stop the remote container yet. It stops your host from *waiting*, while the sandbox keeps computing until it finishes or times out. A single streaming turn gets cut off around 30 minutes. `conductor resume` re-runs the agent rather than restoring in-sandbox state. None of those are dealbreakers for the workflows I have in mind, but you should know them going in.
+The other reason is that I want to run a lot of these at once. Sessions are keyed by an identifier, and Conductor mixes a concurrency discriminator into that key, so parallel agents and for-each iterations always land in separate sessions. Fanning out ten workers gives you ten isolated containers instead of ten processes elbowing each other over one working directory. Sequential reuse is configurable per agent: the default keeps one workspace per agent so retries and loop-backs come back to the same clone, which is what makes the [coding-agent example](https://github.com/microsoft/conductor/blob/main/examples/aca-coding-agent.yaml) work (clone, implement, run tests, loop back on failure without re-cloning).
 
-The one that deserves the most care is credentials. A model-driven shell inside the sandbox can read any environment variable the runner process has, so the design's one hard rule is that the real model key must never enter the sandbox. ACA gives you no per-session secret store and no per-destination egress allowlist to lean on, so that boundary has to live on the host. The Phase 1 mechanism forwards a short-lived, narrowly scoped token into the container, which is fine for *trusted* workflows you control and explicitly not fine for untrusted or multi-tenant use. The proper fix — a host-side credential gateway that injects the real key so the sandbox only ever sees a scoped token — is designed but not shipped yet.
+## What it doesn't do yet
 
-Which is the thing I don't want to oversell: isolation is a boundary, not a guarantee. The right way to use this is to assume the sandbox will be compromised and arrange things so it doesn't matter: scope the token, turn on egress deliberately, treat the container filesystem as hostile. You're not making the agent safe. None of this does. It makes the day it misbehaves a lot less expensive: the worst it can reach is a container you can delete, and your laptop stays out of it.
+It's early, and the gaps are real enough that `conductor validate` rejects workflows that depend on the things it can't support.
 
-That shift is the point for me. We spent a while trying to make the sandbox on the developer's machine strong enough to contain an adversarial agent, and this week reads like a fairly loud argument that we're going to keep losing that fight. Moving the model-driven execution off the host entirely, into something isolated, ephemeral, and cheap to throw away, feels like the more durable bet, the same way I keep landing on deterministic orchestration over letting the model drive.
+Stopping a run stops your host from waiting on the stream. It doesn't stop the container, which keeps computing until it finishes or times out, because the runner image doesn't expose an interrupt endpoint yet and ACA's session-delete operation isn't supported for custom container pools. A single streaming turn also gets cut off around the 30 minute mark on default ACA ingress. `conductor resume` re-runs the agent instead of restoring the session, since there's nothing persistent to restore. The per-agent `tools:` allowlist isn't honored inside the container, so validation rejects it outright rather than quietly ignoring it. And you bring your own pool. Conductor doesn't provision Azure infrastructure for you, though there's a [provisioning script](https://github.com/microsoft/conductor/blob/main/scripts/aca/provision-pool.sh) in the repo that shows the whole two-step deploy.
 
-The provider is early. The direction feels right. If you want to look, it's [issue #284](https://github.com/microsoft/conductor/issues/284) in the Conductor repo, and the provider docs cover the setup, the two-layer auth model, and every one of the caveats above in more detail than a blog post should.
+## The credential problem
+
+The container has to talk to a model backend, which means it needs a credential, which means a model-driven shell inside that container can read it. We decided not to pretend otherwise. The design accepts that the credential enters the sandbox and defends it with scope and lifetime instead.
+
+The recommended path is a fine-grained GitHub token with only the Copilot Requests permission. The worst it can spend is your Copilot quota, it expires, and you can revoke it centrally. With zero setup you get whatever `gh auth token` returns, which is your full `gh` identity: fine on a machine you control for work you trust, not fine anywhere else. The one rule I'd tape to the wall is to never bake a long-lived token into the pool or the image, where it sits there exposed indefinitely.
+
+That's why this is trusted-use only right now. ACA gives you no per-session secret store and no per-destination egress allowlist, so there's nothing to lean on for untrusted or multi-tenant work. Keeping the credential off the sandbox entirely, behind a host-side broker, is designed and not built.
+
+## Where this lands
+
+This is the same bet as the rest of Conductor. I already decided the [orchestrator shouldn't be an LLM](/blog/2026-03-20-introducing-an-ai-agent-workflow-conductor/) and that the structure worth owning is the routing and the gates around the model. Moving the agent loop into a disposable container extends that line to where the model's shell actually runs: deterministic parts on my machine, model-driven parts somewhere I can delete.
+
+I don't want to oversell it. Isolation is a boundary, and boundaries fail. The way to use this is to assume the sandbox gets compromised and set things up so that's survivable, which mostly means scoping the token, turning egress on deliberately, and treating the container filesystem as hostile. None of it makes the agent trustworthy. It just means the day it does something stupid costs me a container I can delete rather than the machine I work from.
+
+If you want to look at it, it's [issue #284](https://github.com/microsoft/conductor/issues/284) and the [provider docs](https://github.com/microsoft/conductor/blob/main/docs/providers/aca.md) cover the setup and every caveat above in more detail than a blog post should.

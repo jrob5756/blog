@@ -7,9 +7,9 @@ categories: ["engineering"]
 draft: true
 ---
 
-Every coding agent I run executes its shell commands on the machine I work from. That's the same machine holding my SSH keys, an `az login` session, a `gh` token, and about forty repos I've cloned and forgotten about. I've mostly handled this by trusting the agent to behave. That isn't a control, it's a hope.
+Every coding agent I run executes its shell commands on the machine I work from. That's the same machine holding my SSH keys, an `az login` session, a `gh` token, and about forty repos I've cloned and forgotten about. In fairness, the agent usually asks before it runs anything. I've also been known to start it with `--dangerously-skip-permissions` so it stops asking, because approving the fortieth `ls` in a row wears you down and I wanted to go get coffee. So the real control here is that I trust the agent to behave, which is less a control than a hope.
 
-So my team added an experimental provider to [Conductor](https://github.com/microsoft/conductor) called `aca`, and it does one thing: it takes the agent's execution loop off your machine and runs it in a container in Azure that you throw away when it's done.
+So we added a new provider to [Conductor](https://github.com/microsoft/conductor) called `aca`, and it does one thing: it takes the agent's execution loop off your machine and runs it in a container in Azure that you throw away when it's done.
 
 ## What it does
 
@@ -29,36 +29,28 @@ runtime:
     egress: enabled
 ```
 
-The rest of the workflow is unchanged. The host-side provider owns no agentic logic at all: it derives a session identifier, grabs an Azure token, posts one streaming request to the pool, and relays each NDJSON event frame back to the event bus verbatim as the container emits it. So the dashboard, the console, and the JSONL log render a sandboxed agent exactly like a local one. Sandbox wall-clock time shows up as its own usage row so you can see what you're spending time on.
+To the rest of Conductor, nothing changes. Events stream back to the console and dashboard just as they do for a local agent, and sandbox time appears as its own usage row.
 
 ## Why we bothered
 
-The reason has less to do with containers than with where the boundary between the agent and everything I own ends up sitting.
+The point is where the boundary between the agent and everything I own ends up sitting.
 
-Pillar Security published a [writeup of seven sandbox escapes](https://www.bleepingcomputer.com/news/security/cursor-codex-gemini-cli-antigravity-hit-by-sandbox-escapes/) across Cursor, Codex CLI, Gemini CLI, and Antigravity a few days before we shipped this, and the mechanism is what got my attention. In several of them the agent never breaks the sandbox. It follows every rule and writes a file into your workspace, a `.vscode` task or a hook or a patched virtualenv interpreter, and a trusted tool outside the sandbox runs it for you later. Usually triggered by an instruction buried in a README or a diff.
+A few days before we shipped this, I saw an article about [seven sandbox escapes](https://www.bleepingcomputer.com/news/security/cursor-codex-gemini-cli-antigravity-hit-by-sandbox-escapes/) across Cursor, Codex CLI, Gemini CLI, and Antigravity. In several cases the agent never broke the sandbox. It wrote a `.vscode` task, a hook, or a patched interpreter into the workspace, then a trusted tool on the host ran it later.
 
-That whole class of attack needs two things: a "later," and a trusted tool sitting on the same filesystem. A dynamic session has neither. There's no editor to run its tasks, no shell profile to poison, no other repos to wander into, and no filesystem after the session ends. You clone what the agent needs at the start and push results out before it's over.
+That attack needs a filesystem shared with the host and something trusted to execute the file later. An ACA session shares neither with your laptop. Its workspace is ephemeral and disappears when the session ends.
 
-The other reason is that I want to run a lot of these at once. Sessions are keyed by an identifier, and Conductor mixes a concurrency discriminator into that key, so parallel agents and for-each iterations always land in separate sessions. Fanning out ten workers gives you ten isolated containers instead of ten processes elbowing each other over one working directory. Sequential reuse is configurable per agent: the default keeps one workspace per agent so retries and loop-backs come back to the same clone, which is what makes the [coding-agent example](https://github.com/microsoft/conductor/blob/main/examples/aca-coding-agent.yaml) work (clone, implement, run tests, loop back on failure without re-cloning).
+It also scales cleanly. Parallel agents and for-each items automatically get separate sessions, while retries and loop-backs can return to the same workspace. Ten workers become ten isolated containers instead of ten processes sharing one directory. The [coding-agent example](https://github.com/microsoft/conductor/blob/main/examples/aca-coding-agent.yaml) uses this to clone once, implement, test, and loop back on failure.
 
 ## What it doesn't do yet
 
-It's early, and the gaps are real enough that `conductor validate` rejects workflows that depend on the things it can't support.
+It's still experimental, and there are some gaps to address. You need to provision your own ACA pool, sessions are ephemeral, and `conductor resume` reruns the agent rather than restoring its workspace. Individual turns should stay under about 30 minutes. Stopping a workflow currently stops the host from waiting, but the remote agent may continue until it finishes or times out. Tool allowlists aren't supported yet, so `conductor validate` rejects them rather than silently ignoring them.
 
-Stopping a run stops your host from waiting on the stream. It doesn't stop the container, which keeps computing until it finishes or times out, because the runner image doesn't expose an interrupt endpoint yet and ACA's session-delete operation isn't supported for custom container pools. A single streaming turn also gets cut off around the 30 minute mark on default ACA ingress. `conductor resume` re-runs the agent instead of restoring the session, since there's nothing persistent to restore. The per-agent `tools:` allowlist isn't honored inside the container, so validation rejects it outright rather than quietly ignoring it. And you bring your own pool. Conductor doesn't provision Azure infrastructure for you, though there's a [provisioning script](https://github.com/microsoft/conductor/blob/main/scripts/aca/provision-pool.sh) in the repo that shows the whole two-step deploy.
+The repo includes a [provisioning script](https://github.com/microsoft/conductor/blob/main/scripts/aca/provision-pool.sh), and the [provider docs](https://github.com/microsoft/conductor/blob/main/docs/providers/aca.md) cover these limitations in detail. These are gaps we hope to close as we do more experimentation and get feedback.
 
-## The credential problem
+## Extra isolation when you need it
 
-The container has to talk to a model backend, which means it needs a credential, which means a model-driven shell inside that container can read it. We decided not to pretend otherwise. The design accepts that the credential enters the sandbox and defends it with scope and lifetime instead.
+I don't expect every Conductor workflow to run in ACA. Local execution is simpler, faster, and the right choice for plenty of work.
 
-The recommended path is a fine-grained GitHub token with only the Copilot Requests permission. The worst it can spend is your Copilot quota, it expires, and you can revoke it centrally. With zero setup you get whatever `gh auth token` returns, which is your full `gh` identity: fine on a machine you control for work you trust, not fine anywhere else. The one rule I'd tape to the wall is to never bake a long-lived token into the pool or the image, where it sits there exposed indefinitely.
+What I wanted was another option for workflows where the agentic loop shouldn't share my machine, whether because of the inputs, the tools it can access, or the number of agents running in parallel. For those workflows, ACA provides an isolated workspace that can disappear when the run is over.
 
-That's why this is trusted-use only right now. ACA gives you no per-session secret store and no per-destination egress allowlist, so there's nothing to lean on for untrusted or multi-tenant work. Keeping the credential off the sandbox entirely, behind a host-side broker, is designed and not built.
-
-## Where this lands
-
-This is the same bet as the rest of Conductor. I already decided the [orchestrator shouldn't be an LLM](/blog/2026-03-20-introducing-an-ai-agent-workflow-conductor/) and that the structure worth owning is the routing and the gates around the model. Moving the agent loop into a disposable container extends that line to where the model's shell actually runs: deterministic parts on my machine, model-driven parts somewhere I can delete.
-
-I don't want to oversell it. Isolation is a boundary, and boundaries fail. The way to use this is to assume the sandbox gets compromised and set things up so that's survivable, which mostly means scoping the token, turning egress on deliberately, and treating the container filesystem as hostile. None of it makes the agent trustworthy. It just means the day it does something stupid costs me a container I can delete rather than the machine I work from.
-
-If you want to look at it, it's [issue #284](https://github.com/microsoft/conductor/issues/284) and the [provider docs](https://github.com/microsoft/conductor/blob/main/docs/providers/aca.md) cover the setup and every caveat above in more detail than a blog post should.
+Most of my workflows will still run locally. The ones I don't want running beside my SSH keys now have somewhere else to go.

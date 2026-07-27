@@ -1,6 +1,6 @@
 ---
-title: "Get the Agent Off Your Laptop"
-date: 2026-07-23
+title: "When the Agent Shouldn't Run on Your Laptop"
+date: 2026-07-29
 description: "Conductor's new experimental aca provider moves an agent's execution loop into a throwaway Azure container, so the orchestration you own stays on your machine and the model-driven shell doesn't."
 tags: ["blog", "ai", "tooling", "open-source", "security"]
 categories: ["engineering"]

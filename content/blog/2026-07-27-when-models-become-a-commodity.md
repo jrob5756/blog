@@ -1,13 +1,13 @@
 ---
-title: "Orchestration Is the Moat"
-date: 2026-07-23
-description: "Frontier models are turning into a commodity. The durable work, and the part I actually own, is the orchestration around them: routing, review loops, and context control."
+title: "When Models Become a Commodity"
+date: 2026-07-27
+description: "Models are getting easier to swap out, which makes them a weaker advantage on their own. The part I actually own is the tooling and process around them, configured as a workflow."
 tags: ["blog", "ai", "tooling", "engineering"]
 categories: ["engineering"]
-draft: true
+draft: false
 ---
 
-A few weeks ago, OpenRouter shipped [Fusion](https://openrouter.ai/openrouter/fusion), a compound API that fans a prompt out to several models and then uses a judge model to combine their answers. It caught my attention since orchestration has been on my mind lately. 
+A few weeks ago, OpenRouter shipped [Fusion](https://openrouter.ai/openrouter/fusion), a compound API that fans a prompt out to several models and then uses a judge model to combine their answers. It caught my attention since agent orchestration has been on my mind lately. 
 
 This simple approach beat most of the frontier models tested. In one case, a panel of cheap models landed within 1% of Claude Fable at about half the cost! Yes, Fable is crazy expensive, but you get the point.
 
@@ -15,7 +15,7 @@ This is similar to the idea that drove me to build [Conductor](https://github.co
 
 ## The model is becoming a commodity
 
-It seems as though models are beginning to commoditize. OpenRouter's usage board tracks what developers are paying for, and open weight models now hold [the top five](https://www.reddit.com/comments/1uuyw46). The reason is money: as one developer put it, "an hour of coding costs about $10 on Claude versus under 50 cents on DeepSeek." The US labs are still leading on quality, but for some day-to-day work a cheap openweight model can be good enough.
+It seems as though models are beginning to commoditize. OpenRouter's usage board tracks what developers are paying for, and open weight models now hold [the top five](https://www.reddit.com/comments/1uuyw46). The reason is money: as one developer in the thread put it, "an hour of coding costs about $10 on Claude versus under 50 cents on DeepSeek." The US labs are still leading on quality, but for some day-to-day work a cheap openweight model can be good enough.
 
 The easier models become to swap, the harder it is for any one of them to be a meaningful advantage. The product has to stand apart for reasons beyond just the model behind it.
 

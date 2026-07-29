@@ -4,7 +4,7 @@ date: 2026-07-29
 description: "Conductor's new experimental aca provider moves an agent's execution loop into a throwaway Azure container, so the orchestration you own stays on your machine and the model-driven shell doesn't."
 tags: ["blog", "ai", "tooling", "open-source", "security"]
 categories: ["engineering"]
-draft: true
+draft: false
 ---
 
 Every coding agent I run executes its shell commands on the machine I work from. That's the same machine holding my SSH keys, an `az login` session, a `gh` token, and about forty repos I've cloned and forgotten about. In fairness, the agent usually asks before it runs anything. I've also been known to start it with `--dangerously-skip-permissions` so it stops asking, because approving the fortieth `ls` in a row wears you down and I wanted to go get coffee. So the real control here is that I trust the agent to behave, which is less a control than a hope.
